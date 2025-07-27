@@ -31,7 +31,7 @@ const data = {
         },
         {
           title: "Mi Hotel",
-          url: "/dashboard/inicio",
+          url: "/dashboard/mi-hotel",
         },
         {
           title: "Apariencia",
