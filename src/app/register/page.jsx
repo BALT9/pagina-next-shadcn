@@ -1,6 +1,7 @@
 "use client"
-
 import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,10 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
-import { useForm } from "react-hook-form"
+import Step1 from "@/components/components-register/Step1"
+import Step2 from "@/components/components-register/Step2"
+import Step3 from "@/components/components-register/Step3"
 
 const steps = [
   { id: 1, title: "Datos Personales" },
@@ -22,16 +22,9 @@ const steps = [
   { id: 3, title: "Servicios" },
 ]
 
-
 export default function Page() {
-  const { register, handleSubmit } = useForm()
-
+  const { register, handleSubmit, reset } = useForm()
   const [currentStep, setCurrentStep] = useState(1)
-
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
-
-  }
 
   const nextStep = () => {
     if (currentStep < steps.length) setCurrentStep(currentStep + 1)
@@ -44,72 +37,18 @@ export default function Page() {
   const onSubmit = (data) => {
     console.log("Datos enviados:", data)
     alert("Formulario enviado correctamente")
+    reset()
     setCurrentStep(1)
   }
 
   const renderStepContent = (step) => {
     switch (step) {
       case 1:
-        return (
-          <>
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input type="text" placeholder="ana" {...register("name")} />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="lastName">Email</Label>
-              <Input type="email" placeholder="ana@example.com" />
-            </div>
-            <div className="flex w-full gap-4">
-              <div className="flex-1 grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Contraseña"
-
-                />
-              </div>
-              <div className="flex-1 grid gap-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirmar contraseña"
-
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="lastName">Age</Label>
-              <Input type="number" placeholder="Number" min="1" />
-            </div>
-          </>
-        )
+        return <Step1 register={register} />
       case 2:
-        return (
-          <>
-            <div className="grid gap-2">
-              <Label htmlFor="phone">Name Market</Label>
-              <Input placeholder="Tieda Amiga" />
-            </div>
-          </>
-        )
+        return <Step2 register={register} />
       case 3:
-        return (
-          <>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input />
-            </div>
-          </>
-        )
+        return <Step3 />
       default:
         return null
     }
@@ -140,16 +79,13 @@ export default function Page() {
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                     ${isCompleted
-                        ? "bg-primary text-white"
-                        : isActive
-                          ? "bg-primary text-white-600"
-                          : "bg-gray-200 text-gray-600"}`}
+                      ? "bg-primary text-white"
+                      : isActive
+                        ? "bg-primary text-white-600"
+                        : "bg-gray-200 text-gray-600"}`}
                   >
                     {step.id}
                   </div>
-                  {/* <span className={` mt-1 text-xs ${isActive ? "text-blue-600 font-semibold" : "text-gray-500"}`}>
-                    {step.title}
-                  </span> */}
                 </div>
               )
             })}
@@ -176,7 +112,9 @@ export default function Page() {
             }
           })}>
             <CardContent className="min-h-[300px]">
-              <div className="flex flex-col gap-6">{renderStepContent(currentStep)}</div>
+              <div className="flex flex-col gap-6">
+                {renderStepContent(currentStep)}
+              </div>
             </CardContent>
 
             <CardFooter className="flex justify-between mt-5">
