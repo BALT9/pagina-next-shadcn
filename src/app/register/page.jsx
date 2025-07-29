@@ -14,13 +14,18 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+import { useForm } from "react-hook-form"
+
 const steps = [
   { id: 1, title: "Datos Personales" },
   { id: 2, title: "Datos Tienda" },
   { id: 3, title: "Servicios" },
 ]
 
+
 export default function Page() {
+  const { register, handleSubmit } = useForm()
+
   const [currentStep, setCurrentStep] = useState(1)
 
   const handleChange = (e) => {
@@ -36,14 +41,10 @@ export default function Page() {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (currentStep === steps.length) {
-      alert("Formulario enviado")
-      setCurrentStep(1)
-    } else {
-      nextStep()
-    }
+  const onSubmit = (data) => {
+    console.log("Datos enviados:", data)
+    alert("Formulario enviado correctamente")
+    setCurrentStep(1)
   }
 
   const renderStepContent = (step) => {
@@ -53,7 +54,7 @@ export default function Page() {
           <>
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
-              <Input type="text" placeholder="ana" />
+              <Input type="text" placeholder="ana" {...register("name")} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="lastName">Email</Label>
@@ -67,7 +68,7 @@ export default function Page() {
                   name="password"
                   type="password"
                   placeholder="Contraseña"
-                  
+
                 />
               </div>
               <div className="flex-1 grid gap-2">
@@ -77,7 +78,7 @@ export default function Page() {
                   name="confirmPassword"
                   type="password"
                   placeholder="Confirmar contraseña"
-                  
+
                 />
               </div>
             </div>
@@ -92,7 +93,7 @@ export default function Page() {
           <>
             <div className="grid gap-2">
               <Label htmlFor="phone">Name Market</Label>
-              <Input  placeholder="Tieda Amiga" />
+              <Input placeholder="Tieda Amiga" />
             </div>
           </>
         )
@@ -125,7 +126,7 @@ export default function Page() {
           <div
             className="absolute top-1/3 left-0 h-2 bg-primary rounded-full -z-10 transition-all duration-300"
             style={{
-              width: `${((currentStep - 1) / (steps.length-1)) * 100}%`
+              width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`
             }}
           />
 
@@ -167,7 +168,13 @@ export default function Page() {
             </CardAction>
           </CardHeader>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit((data) => {
+            if (currentStep === steps.length) {
+              onSubmit(data)
+            } else {
+              nextStep()
+            }
+          })}>
             <CardContent className="min-h-[300px]">
               <div className="flex flex-col gap-6">{renderStepContent(currentStep)}</div>
             </CardContent>
