@@ -43,7 +43,9 @@ export default function Page() {
 
             {/* Botones Desktop */}
             <div className="hidden md:flex items-center space-x-4">
-              <ModeToggle />
+              <div className="bg-primary rounded-md">
+                <ModeToggle />
+              </div>
               <Link href={"/login"} variant="ghost" className="text-slate-700 hover:text-slate-900">
                 Iniciar Sesión
               </Link>
