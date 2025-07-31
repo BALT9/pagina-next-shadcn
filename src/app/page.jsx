@@ -2,12 +2,26 @@
 
 import { ModeToggle } from "@/components/interuptor"
 import { Button } from "@/components/ui/button"
+
+import { loginRequest } from "@/services/auth"
+
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
 export default function Page() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  async function testConnection() {
+    try {
+      const response = await loginRequest({ email: 'luz@example.com', password: '1234567890' });
+      console.log('Respuesta backend:', response.data);
+    } catch (error) {
+      console.error('Error al conectar con backend:', error.response?.data || error.message);
+    }
+  }
+
+  testConnection();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
