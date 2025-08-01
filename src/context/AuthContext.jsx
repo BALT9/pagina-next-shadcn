@@ -2,6 +2,7 @@
 
 import { getProfileRequest, loginRequest } from "@/services/auth";
 import { setAuthHeader } from "@/services/authHeader";
+// import api from "@/services/axios";
 import { useRouter } from "next/navigation";
 
 const { createContext, useContext, useState } = require("react")
@@ -27,19 +28,22 @@ export const AuthProvider = ({ children }) => {
     const login = async (userData) => {
         try {
             const res = await loginRequest(userData)
-            const token = res.data.token;
+            const token = res.data.access_token;
             localStorage.setItem('token', token);
 
             setAuthHeader(token);
+            // console.log("Authorization header seteado:", api.defaults.headers.common['Authorization']);
+
 
             const profileRes = await getProfileRequest();
             setUser(profileRes.data);
+            console.log(res.data);
             setIsAuthenticated(true);
             setErrors([]);
             router.push('/dashboard/inicio');
 
         } catch (error) {
-            console.error(error)
+            console.error(error.response.data)
             setErrors([error.response?.data?.message || 'Error en login'])
             setIsAuthenticated(false)
             setUser(null)

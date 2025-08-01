@@ -15,16 +15,18 @@ import {
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { Input } from "@/components/ui/input"
 
-
-
+import { useAuth } from "@/context/AuthContext"
 
 export default function Page() {
     const { register, handleSubmit, reset } = useForm()
 
-    const onSubmit = (data) => {
+    const { login, errors, loading } = useAuth()
+
+    const onSubmit = async (data) => {
         console.log("Datos enviados:", data)
         alert("Formulario enviado correctamente")
-        reset()
+        await login(data)
+        // reset()
     }
 
     return (
