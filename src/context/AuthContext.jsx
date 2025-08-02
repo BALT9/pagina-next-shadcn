@@ -5,7 +5,7 @@ import { setAuthHeader } from "@/services/authHeader";
 // import api from "@/services/axios";
 import { useRouter } from "next/navigation";
 
-const { createContext, useContext, useState } = require("react")
+const { createContext, useContext, useState, useEffect } = require("react")
 
 
 const AuthContext = createContext();
@@ -24,6 +24,33 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            // await new Promise(r => setTimeout(r, 1000)); // 1s delay
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    setAuthHeader(token);
+                    const res = await getProfileRequest();
+                    setUser(res.data);
+                    console.log(res.data)
+                    setIsAuthenticated(true);
+                } catch {
+                    localStorage.removeItem("token");
+                    setIsAuthenticated(false);
+                    setUser(null);
+                }
+            } else {
+                setIsAuthenticated(false);
+                setUser(null);
+            }
+            setLoading(false);
+        };
+        checkAuth();
+    }, []);
+
+
 
     const registerA = async (userData) => {
         try {
