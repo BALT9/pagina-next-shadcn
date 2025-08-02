@@ -31,13 +31,19 @@ export default function Step1({ register }) {
             name="confirmPassword"
             type="password"
             placeholder="Confirmar contraseña"
-            {...register("cpassword")}
+          // {...register("cpassword")}
           />
         </div>
       </div>
       <div className="grid gap-2">
         <Label htmlFor="age">Age</Label>
-        <Input type="number" placeholder="Number" min="1" {...register("age")} />
+        <Input
+          type="number"
+          placeholder="Number"
+          min="1"
+          {...register("age", { valueAsNumber: true })}
+        />
+
       </div>
     </>
   )

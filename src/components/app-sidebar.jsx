@@ -2,6 +2,8 @@ import * as React from "react"
 
 import Link from "next/link"
 
+import { useAuth } from "@/context/AuthContext"
+
 import { SearchForm } from "@/components/search-form"
 import { VersionSwitcher } from "@/components/version-switcher"
 import {
@@ -63,6 +65,13 @@ const data = {
 export function AppSidebar({
   ...props
 }) {
+
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout(); // Llama a la función del contexto
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -87,6 +96,18 @@ export function AppSidebar({
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
+        <SidebarGroup>
+          <SidebarGroupLabel>Cuenta</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleLogout}>
+                  Cerrar sesión
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

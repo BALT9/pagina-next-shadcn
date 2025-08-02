@@ -2,6 +2,8 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 
+import { useAuth } from "@/context/AuthContext"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -23,6 +25,8 @@ const steps = [
 ]
 
 export default function Page() {
+  const { registerA } = useAuth();
+
   const { register, handleSubmit, reset } = useForm()
   const [currentStep, setCurrentStep] = useState(1)
 
@@ -34,11 +38,15 @@ export default function Page() {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
 
-  const onSubmit = (data) => {
-    console.log("Datos enviados:", data)
-    alert("Formulario enviado correctamente")
-    reset()
-    setCurrentStep(1)
+  const onSubmit = async (data) => {
+    try {
+      console.log(data)
+      await registerA(data)  // Usá la función correcta
+      reset()
+      setCurrentStep(1)
+    } catch (error) {
+      console.error("Error en registro:", error)
+    }
   }
 
   const renderStepContent = (step) => {
@@ -79,10 +87,10 @@ export default function Page() {
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                     ${isCompleted
-                      ? "bg-primary text-white"
-                      : isActive
-                        ? "bg-primary text-white-600"
-                        : "bg-gray-200 text-gray-600"}`}
+                        ? "bg-primary text-white"
+                        : isActive
+                          ? "bg-primary text-white-600"
+                          : "bg-gray-200 text-gray-600"}`}
                   >
                     {step.id}
                   </div>

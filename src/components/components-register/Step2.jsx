@@ -6,7 +6,7 @@ export default function Step2({ register }) {
   return (
     <div className="grid gap-2">
       <Label htmlFor="market">Name Market</Label>
-      <Input placeholder="Tienda Amiga" id="market" {...register("market")} />
+      <Input placeholder="Tienda Amiga" />
     </div>
   )
 }
