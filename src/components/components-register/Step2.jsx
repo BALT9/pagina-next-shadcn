@@ -5,8 +5,12 @@ import { Label } from "@/components/ui/label"
 export default function Step2({ register }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor="market">Name Market</Label>
-      <Input placeholder="Tienda Amiga" />
+      <Label htmlFor="nombreTienda">Nombre de la Tienda</Label>
+      <Input
+        id="nombreTienda"
+        placeholder="Tienda Amiga"
+        {...register("nombreTienda", { required: true })}
+      />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { getProfileRequest, loginRequest, registerRequest, logoutRequest } from "@/services/auth";
 import { setAuthHeader } from "@/services/authHeader";
+import { createTiendaRequest } from "@/services/tienda";
 // import api from "@/services/axios";
 import { useRouter } from "next/navigation";
 
@@ -55,21 +56,33 @@ export const AuthProvider = ({ children }) => {
     const registerA = async (userData) => {
         try {
             setLoading(true);
-            const res = await registerRequest(userData);
+
+            // Paso 1: Registrar usuario sin tienda
+            const { nombreTienda, ...userWithoutTienda } = userData;
+            const res = await registerRequest(userWithoutTienda);
             const token = res.data.access_token;
             localStorage.setItem('token', token);
-
             setAuthHeader(token);
 
+            // Paso 2: Crear tienda si existe nombreTienda
+            if (nombreTienda) {
+                await createTiendaRequest({ name: nombreTienda });
+                console.log(res.data);
+                // Opcional: si createTiendaRequest devuelve el ID o la tienda creada,
+                // se podría enlazar con el usuario aquí en backend o frontend
+            }
+
+            // Paso 3: Obtener perfil actualizado con tienda ya enlazada
             const profileRes = await getProfileRequest();
             setUser(profileRes.data);
-            console.log(res.data);
+
             setIsAuthenticated(true);
             setErrors([]);
             router.push('/dashboard/inicio');
+            console.log(user)
 
         } catch (error) {
-            console.error(error.response?.data);
+            console.error(error.response?.data || error.message);
             setErrors([error.response?.data?.message || 'Error en registro']);
             setIsAuthenticated(false);
             setUser(null);
@@ -77,6 +90,8 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
+
+
 
     const login = async (userData) => {
         try {
