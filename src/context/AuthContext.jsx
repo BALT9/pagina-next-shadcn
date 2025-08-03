@@ -67,7 +67,6 @@ export const AuthProvider = ({ children }) => {
             // Paso 2: Crear tienda si existe nombreTienda
             if (nombreTienda) {
                 await createTiendaRequest({ name: nombreTienda });
-                console.log(res.data);
                 // Opcional: si createTiendaRequest devuelve el ID o la tienda creada,
                 // se podría enlazar con el usuario aquí en backend o frontend
             }
@@ -75,11 +74,11 @@ export const AuthProvider = ({ children }) => {
             // Paso 3: Obtener perfil actualizado con tienda ya enlazada
             const profileRes = await getProfileRequest();
             setUser(profileRes.data);
+            console.log("perfil recibido:", profileRes.data); // ✅ Este sí tiene la info
 
             setIsAuthenticated(true);
             setErrors([]);
             router.push('/dashboard/inicio');
-            console.log(user)
 
         } catch (error) {
             console.error(error.response?.data || error.message);

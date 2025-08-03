@@ -2,6 +2,9 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+
 import { useAuth } from "@/context/AuthContext"
 
 import { Button } from "@/components/ui/button"
@@ -25,7 +28,16 @@ const steps = [
 ]
 
 export default function Page() {
-  const { registerA } = useAuth();
+
+  const { registerA, isAuthenticated, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      router.push("/dashboard/inicio");
+    }
+  }, [loading, isAuthenticated]);
+
 
   const { register, handleSubmit, reset } = useForm()
   const [currentStep, setCurrentStep] = useState(1)
@@ -48,6 +60,8 @@ export default function Page() {
       console.error("Error en registro:", error)
     }
   }
+
+  if (loading) return <div>Cargando...</div>;
 
   const renderStepContent = (step) => {
     switch (step) {
