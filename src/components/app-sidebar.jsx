@@ -55,7 +55,7 @@ const data = {
       items: [
         {
           title: "Mis Habitaciones",
-          url: "/",
+          url: "/dashboard/productos",
         },
       ],
     },
