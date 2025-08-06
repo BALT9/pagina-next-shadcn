@@ -49,6 +49,18 @@ export default function Productos() {
               key={producto._id}
               className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 rounded-lg shadow-md p-6 flex flex-col"
             >
+              {/* Imagen del producto */}
+              <img
+                src={
+                  producto.imageUrl?.trim()
+                    ? producto.imageUrl
+                    : "https://www.edesk.com/wp-content/uploads/2021/03/find-trending-products-sell-ecommerce.png"
+                }
+                alt={producto.title}
+                className="w-full h-48 object-cover rounded-md mb-4"
+              />
+
+
               <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
                 {producto.title}
               </h2>
@@ -73,6 +85,7 @@ export default function Productos() {
               </div>
             </div>
           ))}
+
         </div>
       )}
     </div>
