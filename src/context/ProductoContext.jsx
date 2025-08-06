@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { createProductoRequest, deleteProductoRequest, getProductoRequest, getProductosRequest, updateProductoRequest } from "@/services/producto";
+import { useAuth } from "./AuthContext";
 
 const ProductoContext = createContext();
 
@@ -14,12 +15,24 @@ export const ProductoProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // limpiar productos 
+    const { user } = useAuth();
+    useEffect(() => {
+        if (!user) {
+            setProductos([]);  // Limpias productos para que no muestre datos viejos
+        } else {
+            fetchProductos();  // Cargas los productos del usuario actual
+        }
+    }, [user]);  // Se ejecuta cada vez que `user` cambie
+
+
+
     const fetchProductos = async () => {
         setLoading(true);
         try {
             const res = await getProductosRequest();
             setProductos(res.data);
-            console.log("producto: ",res.data)
+            console.log("producto: ", res.data)
             setError(null);
         } catch (err) {
             if (err.response?.status === 404) {

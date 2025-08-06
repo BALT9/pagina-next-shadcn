@@ -16,10 +16,6 @@ export default function Productos() {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    fetchProductos();
-  }, []);
-
   const onSubmit = async (data) => {
     await createProducto(data);
     reset();
@@ -33,9 +29,6 @@ export default function Productos() {
         {/* Modal incluye el botón para abrir */}
         <ModalCrearProductoShadcn onCreated={fetchProductos} />
       </div>
-
-      {/* Modal */}
-
 
       {loading && <p className="text-gray-600 dark:text-gray-300">Cargando productos...</p>}
       {error && <p className="text-red-500">{error}</p>}
@@ -69,16 +62,15 @@ export default function Productos() {
                 ${producto.price}
               </p>
 
-              <div className="mt-auto flex justify-between space-x-2">
-                <button
-                  onClick={() => alert(`Editar producto ID: ${producto._id}`)}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg w-full"
-                >
-                  Editar
-                </button>
+              <div className="mt-auto flex justify-end space-x-2">
+                <ModalCrearProductoShadcn
+                  editMode={true}
+                  initialData={producto}
+                  onCreated={fetchProductos}
+                />
                 <button
                   onClick={() => deleteProducto(producto._id)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full"
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
                 >
                   Eliminar
                 </button>
